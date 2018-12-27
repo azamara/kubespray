@@ -20,6 +20,7 @@ loadbalancer_apiserver:
 #  port: 1234
 
 ## Internal loadbalancers for apiservers
+loadbalancer_apiserver_localhost: False
 #loadbalancer_apiserver_localhost: true
 
 ## Local loadbalancer should use this port instead, if defined.
