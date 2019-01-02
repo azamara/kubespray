@@ -1,0 +1,1 @@
+etcd_cert_dir: "{{ etcd_config_dir }}/ssl"

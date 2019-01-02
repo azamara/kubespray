@@ -1,0 +1,43 @@
+---
+- name: Flannel | Start Resources
+  kube:
+    name: "{{item.item.name}}"
+    namespace: "kube-system"
+    kubectl: "{{bin_dir}}/kubectl"
+    resource: "{{item.item.type}}"
+    filename: "{{kube_config_dir}}/{{item.item.file}}"
+    state: "latest"
+  with_items: "{{ flannel_node_manifests.results }}"
+  when: inventory_hostname == groups['kube-master'][0] and not item is skipped
+
+- name: Flannel | Set NKS Network Config to ETCD2
+  command: "{{ bin_dir }}/etcdctl --peers={{ etcd_access_addresses }} set /coreos.com/network/config '{{ flannel_net_config }}'"
+  environment:
+    ETCDCTL_API: 2
+    ETCDCTL_CERT_FILE: "{{ etcd_cert_dir }}/node-{{ inventory_hostname }}.pem"
+    ETCDCTL_KEY_FILE: "{{ etcd_cert_dir }}/node-{{ inventory_hostname }}-key.pem"
+  register: old_data_exists
+  delegate_to: "{{groups['etcd'][0]}}"
+  changed_when: false
+  failed_when: false
+
+- name: Flannel | Check if flannel pod manifests already exists
+  stat: path={{ kube_config_dir }}/cni-flannel-pod.yml
+  register: flannel_yml_stat
+  delegate_to: "{{ item }}"
+  with_items: "{{ groups['k8s-cluster'] }}"
+  changed_when: false
+  failed_when: false
+
+- name: Flannel | Move Flannel pods manifests yaml
+  command: mv {{ kube_config_dir }}/cni-flannel-pod.yml {{ kube_config_dir }}/manifests/cni-flannel-pod.yml
+  delegate_to: "{{ item }}"
+  with_items: "{{ groups['k8s-cluster'] }}"
+  changed_when: false
+  failed_when: false
+
+- name: Flannel | Wait for flannel subnet.env file presence
+  wait_for:
+    path: /run/flannel/subnet.env
+    delay: 5
+    timeout: 600
