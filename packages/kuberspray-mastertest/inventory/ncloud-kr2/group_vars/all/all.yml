@@ -13,13 +13,14 @@ bin_dir: /usr/local/bin
 
 
 ## External LB example config
-## apiserver_loadbalancer_domain_name: "elb.some.domain"
-#loadbalancer_apiserver:
+apiserver_loadbalancer_domain_name: "slb-1151122.ncloudslb.com"
+loadbalancer_apiserver:
 #  address: 1.2.3.4
+  port: 6443
 #  port: 1234
 
 ## Internal loadbalancers for apiservers
-#loadbalancer_apiserver_localhost: true
+loadbalancer_apiserver_localhost: true
 
 ## Local loadbalancer should use this port instead, if defined.
 ## Defaults to kube_apiserver_port (6443)
