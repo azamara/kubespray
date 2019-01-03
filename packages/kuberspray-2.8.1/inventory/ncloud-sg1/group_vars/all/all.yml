@@ -13,13 +13,14 @@ bin_dir: /usr/local/bin
 
 
 ## External LB example config
-apiserver_loadbalancer_domain_name: "slb-1061794.sgn.ncloudslb.com"
+apiserver_loadbalancer_domain_name: "slb-1167207.sgn.ncloudslb.com"
 loadbalancer_apiserver:
 #  address: 1.2.3.4
   port: 6443
+#  port: 1234
 
 ## Internal loadbalancers for apiservers
-loadbalancer_apiserver_localhost: False
+loadbalancer_apiserver_localhost: true
 
 ## Local loadbalancer should use this port instead, if defined.
 ## Defaults to kube_apiserver_port (6443)
@@ -42,11 +43,15 @@ loadbalancer_apiserver_localhost: False
 ## If set the possible values are either 'gce', 'aws', 'azure', 'openstack', 'vsphere', 'oci', or 'external'
 ## When openstack is used make sure to source in the openstack credentials
 ## like you would do when using nova-client before starting the playbook.
+## Note: The 'external' cloud provider is not supported. 
+## TODO(riverzhang): https://kubernetes.io/docs/tasks/administer-cluster/running-cloud-controller/#running-cloud-controller-manager
 #cloud_provider:
 
+## kubeadm deployment mode
+kubeadm_enabled: true
 
-## Uncomment to enable experimental kubeadm deployment mode
-#kubeadm_enabled: false
+# Skip alert information
+skip_non_kubeadm_warning: false
 
 ## Set these proxy values in order to update package manager and docker daemon to use proxies
 #http_proxy: ""
@@ -74,10 +79,14 @@ loadbalancer_apiserver_localhost: False
 #ignore_assert_errors: false
 
 ## The read-only port for the Kubelet to serve on with no authentication/authorization. Uncomment to enable.
-#kube_read_only_port: 10255
+kube_read_only_port: 10255
 
 ## Set true to download and cache container
 #download_container: true
+
+## Deploy container engine
+# Set false if you want to deploy container engine manually.
+#deploy_container_engine: true
 
 ## Set Pypi repo and cert accordingly
 #pyrepo_index: https://pypi.example.com/simple
