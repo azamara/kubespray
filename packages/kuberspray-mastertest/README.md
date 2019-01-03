@@ -16,7 +16,7 @@ echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" >> /etc/apt/sources
 RUN apt-get -y update && \
 apt-get -y install kubeadm=1.12.3-00 kubelet=1.12.3-00 kubectl=1.12.3-00
 
-RUN mkdir -p /etc/kubernetes && ln -s /etc/kubernetes /etc/nks-kubernetes
+RUN mkdir -p /etc/kubernetes && ln -s /etc/kubernetes /etc/kubernetes
 
 VOLUME ["/etc/kubernetes"]
 
