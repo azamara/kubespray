@@ -71,7 +71,7 @@ kube_users:
 
 # Choose network plugin (cilium, calico, contiv, weave or flannel)
 # Can also be set to 'cloud', which lets the cloud provider setup appropriate routing
-kube_network_plugin: flannel
+kube_network_plugin: calico
 
 # Kubernetes internal network for services, unused block of space.
 kube_service_addresses: 172.16.0.0/13
